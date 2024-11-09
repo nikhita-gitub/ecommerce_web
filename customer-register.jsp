@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: "Comic Sans MS", "Comic Sans", cursive;
-            background-image: url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
             background-size: cover;
             background-position: center;
             color: #333;
@@ -33,6 +33,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             width: 400px;
             text-align: center;
+             margin-left: 400px
         }
 
         h1 {
@@ -50,7 +51,7 @@
         }
 
         .signup-btn {
-            background-color: #f76c6c;
+            background-color: #f09595;
             color: white;
             border: none;
             padding: 10px 15px;
@@ -61,7 +62,7 @@
         }
 
         .welcome-section {
-            background-color: #f76c6c;
+            background-color: #f09595;
             color: white;
             padding: 20px;
             border-radius: 10px;
@@ -93,7 +94,49 @@
             margin-top: 15px;
             font-size: 0.9em;
         }
+error-message {
+            color: red;
+            font-size: 0.85em;
+            display: none;
+            margin: -5px 0 10px;
+        }
+
     </style>
+    <script>
+        function validateSignUpForm() {
+            let name = document.getElementById("name");
+            let email = document.getElementById("email");
+            let password = document.getElementById("password");
+            let confirmPassword = document.getElementById("confirm-password");
+
+            let emailError = document.getElementById("email-error");
+            let emptyFieldError = document.getElementById("empty-field-error");
+            let passwordMatchError = document.getElementById("password-match-error");
+
+            emailError.style.display = "none";
+            emptyFieldError.style.display = "none";
+            passwordMatchError.style.display = "none";
+
+            let isValid = true;
+
+            if (!name.value || !email.value || !password.value || !confirmPassword.value) {
+                emptyFieldError.style.display = "block";
+                isValid = false;
+            }
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (email.value && !emailPattern.test(email.value)) {
+                emailError.style.display = "block";
+                isValid = false;
+            }
+
+            if (password.value && confirmPassword.value && password.value !== confirmPassword.value) {
+                passwordMatchError.style.display = "block";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
 </head>
 <body>
     
@@ -131,12 +174,14 @@
         
         <h1>Create Account</h1>
         
-        <form action ="AddCustomer" method ="post">
-        <input type="text" class="input-field" name = "name" placeholder="Name" required>
-        <input type="email" class="input-field" name = "email" placeholder="Email" required>
-        <input type="password" class="input-field" name = "password" placeholder="Password" required>
-        <input type="password" class="input-field" name = "password1" placeholder="Re-enter Password" required>
-        <button class="signup-btn">Sign Up</button>
+        <form action ="AddCustomer" onsubmit="return validateSignUpForm()"  method ="post">
+        <input type="text" class="input-field" id="name"  name = "name" placeholder="Name" required>
+        <input type="email" class="input-field" id="email" name = "email" placeholder="Email" required>
+        <div id="email-error" class="error-message">Please enter a valid email address.</div>
+
+        <input type="password" class="input-field" id="password" name = "password" placeholder="Password" required>
+        <input type="password" class="input-field" id="confirm-password" name = "password1" placeholder="Re-enter Password" required>
+        <button type="submit" class="signup-btn">Sign Up</button>
         </form>
         <div class="existing-account">
             Already have an account? <a href="customer-login.jsp" class="sign-in-link">Sign in</a>
