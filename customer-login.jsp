@@ -15,7 +15,7 @@
     <style>
         body {
             font-family: "Comic Sans MS", "Comic Sans", cursive;
-            background-image: url('https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Add a link to a suitable gift-themed image */
+            background-image: url('https://images.pexels.com/photos/3309659/pexels-photo-3309659.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'); /* Add a link to a suitable gift-themed image */
             background-size: cover;
             background-position: center;
             color: #333;
@@ -49,7 +49,7 @@
         }
 
         .login-btn {
-            background-color: #f76c6c;
+            background-color: #f09595;
             color: white;
             border: none;
             padding: 10px 15px;
@@ -72,6 +72,7 @@
         .remember-me {
             font-size: 0.9em;
             margin-bottom: 20px;
+            margin-top: 20px;
         }
 
         .website-name {
@@ -79,22 +80,55 @@
             font-weight: bold;
             margin-bottom: 10px;
         }
+.sign-up-message {
+            font-size: 0.9em;
+            margin-top: 20px; 
+        }
+        .sign-up-link {
+            color: #f76c6c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .admin-login {
+            font-size: 0.9em;
+            color: #f76c6c;
+            text-decoration: none;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        .admin-login:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.85em;
+            display: none;
+            margin: -5px 0 10px;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="website-name">e gift shopee</div>
+        <div class="website-name">E gift shopee</div>
         <h1>Login</h1>
-        <form action ="customerLogin" method = "post">
-        <p>Don't have an account yet? <a href="#">Sign Up</a></p>
-        <input type="email" name ="email" class="input-field" placeholder="Email Address" required>
-        <input type="password" name ="password"class="input-field" placeholder="Enter 6 characters or more" required>
-        <a href="#" class="forgot-password">Forgot Password?</a>
+        <form action ="customerLogin" method = "post" onsubmit="return validateLoginForm()">
+        
+        <input type="email" name ="email" class="input-field" placeholder="Email Address" required id="email">
+        <div id="email-error" class="error-message">Please enter a valid email address.</div>
+
+        <input type="password" id="password"  name ="password"class="input-field" placeholder="Enter 6 characters or more" required>
+        <div id="empty-field-error" class="error-message">Both fields are required.</div>
+        <a href="forgot_pass.jsp" class="forgot-password">Forgot Password?</a>
         <div class="remember-me">
             <input type="checkbox"> Remember me
         </div>
         <button class="login-btn">LOGIN</button>
         </form>
+        <p class="sign-up-message">Don't have an account yet? <a href="signup.jsp">Sign Up</a></p>
+        <a href="login_admin.html" class="admin-login">Login as Admin</a>
     </div>
 </body>
 </html>
