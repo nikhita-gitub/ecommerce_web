@@ -5,6 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="com.productlist.Product" %>
+<%
+    // Assuming you have a list of products in request scope
+    
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,7 +185,7 @@
             </select>
             <a href="#" class="icon">🛒 Add to Cart</a>
             <a href="#" class="icon">📦 Ordered Items</a>
-            <a href="#" class="icon">🔑 Login</a>
+            <a href="customer-login.jsp" class="icon">🔑 Login</a>
         </div>
     </div>
 
@@ -189,102 +195,53 @@
     </div>
     <!-- Gift Grid Section -->
     <div class="gift-grid">
-        <!-- Sample Gift Items -->
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 1">
-            <h4>Men’s Wallet</h4>
-            <p class="price">$25.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 4">
-            <h4>Couple’s Mug Set</h4>
-            <p class="price">$30.00</p>
-            <div class="button-group">
-                <button>❤ Like</button>
-                <button>🛒 Add to Cart</button>
-            </div>
-        </div>
-        <!-- More gift items here... -->
         
-    </div>
-    <div class="view-more">
-        <button>View More Gifts</button>
+        
+           
+        
+        
+      
+    <% 
+
+      ArrayList<Product> products = (ArrayList<Product>) request.getAttribute("products");
+      
+      
+    
+      if (products != null && !products.isEmpty()) { %>
+        <% for (Product product : products) { %>
+        
+        <div class="gift-item">
+                <img src="<%= request.getContextPath() + "/" + product.getImage() %>" alt="<%= product.getName() %>">
+
+
+                <h4><%= product.getName() %></h4>
+                <p><%= product.getDescription() %></p>
+                <p class="price">$<%= product.getPrice() %></p>
+                <div class="button-group">
+                    <button>❤️ Like</button>
+                    <button>🛒 Add to Cart</button>
+                </div>
+            </div> 
+                
+           
+                
+       <p>Image Path: <%= request.getContextPath() + "/" + product.getImage() %></p>      
+     <p>Context Path: <%= request.getContextPath() %></p>
+    
+                 
+
+    <!-- Your existing header section here -->
+                
+           
+           
+     
+                
+        <% } %>
+    <% } else { %>
+        <p>No products available.</p>
+    <% } %>
+</div>  
+    
     </div>
      <!-- View More Gifts Section -->
      
