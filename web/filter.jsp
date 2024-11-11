@@ -161,37 +161,68 @@
 
     <br/>
 
-    <div class="products-heading">
-        Our Products
-    </div>
 
-    <div class="gift-grid">
+    
         <%
-            ResultSet retriveProduct = DatabaseConnection.getResultFromSqlQuery("SELECT * FROM tblproduct");
-            while (retriveProduct.next()) {
+            String searchQuery = request.getParameter("search");
+            if (searchQuery == null || searchQuery.trim().isEmpty()) {
+              searchQuery = ""; // If no search term is provided, use an empty string
+            }
+            String sql = "SELECT * FROM tblproduct WHERE description LIKE ?";
+    
+            // Create a prepared statement
+            PreparedStatement pstmt = null;
+            ResultSet rs = null;
+
+            try {
+                pstmt = DatabaseConnection.getConnection().prepareStatement(sql);
+                pstmt.setString(1, "%" + searchQuery + "%"); // Use LIKE to search for a match
+
+                // Execute the query
+                rs = pstmt.executeQuery();
+
+                // Display the search results
+                if (!rs.isBeforeFirst()) { 
         %>
+            <p>No products found matching your search.</p>
+        <% 
+                } else {
+                    while (rs.next()) {
+        %>
+            <div class="products-heading">
+                Search Results for <%= searchQuery %>
+            </div>
+            <div class="gift-grid">
+
             <div class="gift-item">
                 <form action="AddToCart" method="post">
                     <div>
-                        <div>
-                            <div>
-                                <input type="hidden" name="productId" value="<%= retriveProduct.getInt("id") %>">
-                                <img src="uploads/products/<%= retriveProduct.getString("image_name") %>" alt="Gift Image">
+                                <input type="hidden" name="productId" value="<%= rs.getInt("id") %>">
+                                <img src="uploads/products/<%= rs.getString("image_name") %>" alt="Gift Image">
                             </div>
                             <div class="item-info-product">
-                                <h4><%= retriveProduct.getString("name") %></h4>
-                                <h5>Category: <%= retriveProduct.getString("product_category") %></h5>
+                                <h4><%= rs.getString("name") %></h4>
+                                <h5>Category: <%= rs.getString("product_category") %></h5>
                                 <div class="price">
-                                    <h7>Rs.<%= retriveProduct.getString("price") %></h7>
-                                    <input type="hidden" name="price" value="<%= retriveProduct.getString("price") %>">
+                                    <h7>Rs.<%= rs.getString("price") %></h7>
+                                    <input type="hidden" name="price" value="<%= rs.getString("price") %>">
                                 </div>
-                                <input type="submit" value="Add to cart" class="view-more" onclick="return confirm('Are you sure Do you want to add this item in cart?');">
-                            </div>
-                        </div>
+                                <input type="submit" value="Add to cart" class="view-more" onclick="return confirm('Are you sure you want to add this item to your cart?');">
                     </div>
                 </form>
             </div>
-        <%
+        <% 
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (rs != null) rs.close();
+                    if (pstmt != null) pstmt.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         %>
     </div>

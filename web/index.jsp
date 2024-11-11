@@ -158,6 +158,7 @@
                         <h4><%= retriveProduct.getString("name") %></h4>
                         <h5>Category: <%= retriveProduct.getString("product_category") %></h5>
                         <div class="price">
+                            <h7>Rs.<%= retriveProduct.getString("price") %></h7>
                             <input type="hidden" name="price" value="<%= retriveProduct.getString("price") %>">
                         </div>
                         
@@ -173,7 +174,8 @@
 
      <!More gift items here-->
     <div class="view-more">
-        <a href ="products.jsp" >View More Gifts</a>
+        <button onclick="window.location.href='products.jsp'" class="button">View More Gifts</button>
+
     </div>
 
     

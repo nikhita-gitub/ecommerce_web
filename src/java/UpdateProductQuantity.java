@@ -18,16 +18,16 @@ public class UpdateProductQuantity extends HttpServlet {
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         int productId = Integer.parseInt(request.getParameter("productId"));
         HttpSession session = request.getSession();
-        String discount_price = null;
+        String product_price = null;
         Double productPrice = 0.0;
         try {
             //Querying to database
-            ResultSet rs = DatabaseConnection.getResultFromSqlQuery("select discount_price from tblcart where customer_id='" + session.getAttribute("id") + "' and product_id='" + productId + "'");
+            ResultSet rs = DatabaseConnection.getResultFromSqlQuery("select item_price from tblcart where customer_id='" + session.getAttribute("id") + "' and product_id='" + productId + "'");
             while (rs.next()) {
                 //Gettinh data
-                discount_price = rs.getString("discount_price");
+                product_price = rs.getString("item_price");
                 //Converting into double from string
-                productPrice = Double.parseDouble(discount_price);
+                productPrice = Double.parseDouble(product_price);
             }
             productPrice = productPrice * quantity;
             //Update Query for updating product quantity

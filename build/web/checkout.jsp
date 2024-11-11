@@ -3,185 +3,309 @@
 <%@ page import="java.sql.*"%>
 <%@ page import="java.util.*"%>
 
-<html>
+<html lang="en">
+
     <head>
-        <title>Online Shopping System</title>
-        
-        <!-- Required external JS libraries -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Shopping Cart - e gift shopee</title>
+
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-        
-        <!-- Optional: Include jQuery easing if needed (already used in the original code) -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-        
-        <!-- Additional Styles -->
+
         <style>
-            /* Add minimal necessary styles here (if required) */
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            /* Cart container should start below the header */
+
             body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
+                font-family: "Comic Sans MS", "Comic Sans", cursive;
+                background-color: #f8f8f8;
+                color: #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                padding: 20px;
             }
-            .checkout {
-                margin-top: 20px;
-            }
-            .checkout table {
+
+            .cart-container {
+                display: flex;
+                background-color: rgba(255, 255, 255, 0.95);
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
                 width: 100%;
-                border-collapse: collapse;
+                max-width: 1200px;
+                overflow: hidden;
             }
-            .checkout table th, .checkout table td {
-                padding: 10px;
+
+            .cart-items-section {
+                width: 65%;
+                padding: 30px;
+                border-right: 1px solid #ddd;
+            }
+
+            .summary-section {
+                width: 35%;
+                padding: 30px;
+                background-color: #f7e3e1;
+            }
+
+            h1 {
+                font-size: 2em;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .cart-items {
+                list-style-type: none;
+                margin-bottom: 30px;
+            }
+
+            .cart-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 15px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .item-details {
+                display: flex;
+                align-items: center;
+            }
+
+            .item-image {
+                width: 100px;
+                height: 100px;
+                border-radius: 5px;
+                margin-right: 15px;
+                object-fit: cover;
+            }
+
+            .item-name {
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+
+            .item-price {
+                font-size: 1.1em;
+                margin-left: 20px;
+            }
+
+            .remove-item {
+                cursor: pointer;
+                color: #f76c6c;
+                font-size: 1.2em;
+                margin-left: 10px;
+            }
+
+            .quantity-controls {
+                display: flex;
+                align-items: center;
+                margin-left: 50px;
+            }
+
+            .quantity-controls button {
+                background-color: #ddd;
+                border: none;
+                padding: 5px;
+                font-size: 1em;
+                cursor: pointer;
+            }
+
+            .quantity-controls input {
+                width: 40px;
+                text-align: center;
                 border: 1px solid #ddd;
+                margin: 0 5px;
+                font-size: 1em;
             }
-            .checkout-left, .checkout-right-basket {
-                margin-top: 20px;
+
+            .coupon-section {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+                font-size: 1.2em;
             }
-            /* CSS for the Proceed to Address Button */
-.checkout-action {
-    text-align: center;
-    margin-top: 20px;
-}
 
-.checkout-action .btn {
-    background-color: #ff6f61; /* pink background */
-    color: white; /* White text */
-    padding: 15px 32px; /* Padding for button */
-    font-size: 18px; /* Larger font size */
-    border: none; /* Remove border */
-    border-radius: 8px; /* Rounded corners */
-    text-decoration: none; /* Remove underline */
-    display: inline-block;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
+            .coupon-section input {
+                flex-grow: 1;
+                padding: 5px;
+                margin-right: 10px;
+                font-size: 1em;
+            }
 
-/* Button Hover Effect */
-.checkout-action .btn:hover {
-    background-color: #ff6f61; /* Darker pink */
-    transform: translateY(-2px); /* Slight lift effect */
-}
+            .quantity-controls {
+                display: flex;
+                align-items: center; /* Vertically center items */
+            }
 
-/* Button Focus Effect (for accessibility) */
-.checkout-action .btn:focus {
-    outline: none; /* Remove default outline */
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); /* Add custom focus outline */
-}
+            .quantity-input {
+                display: flex;
+                align-items: center; /* Align number input and button side by side */
+            }
 
+            .quantity-input input[type="number"] {
+                width: 50px;
+                height: 35px;
+                margin-right: 10px; /* Space between the number input and the submit button */
+            }
+
+            .apply-btn {
+                background-color: #f76c6c;
+                color: white;
+                border: none;
+                padding: 6px 15px; /* Adjust padding */
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 1em;
+                display: inline-block;
+                text-align: center;
+                white-space: nowrap; /* Prevent text from wrapping */
+                min-width: 100px; /* Optional: Ensures button has a minimum width */
+            }
+
+
+            .apply-btn::before {
+                content: "change";
+                font-size: 1.2em;
+            }
+
+            .discount-section, .total-section {
+                font-size: 1.2em;
+                margin-bottom: 40px;
+            }
+
+            .checkout-btn {
+                display: block;
+                background-color: #f76c6c;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                font-size: 1.2em;
+                cursor: pointer;
+                width: 100%;
+                text-align: center;
+                margin-top: 40px;
+            }
+
+            .back-to-shop {
+                display: block;
+                text-align: center;
+                color: #f76c6c;
+                text-decoration: none;
+                margin-top: 30px;
+                font-size: 1em;
+            }
         </style>
-        
-        <script>
-            // Custom JavaScript if needed
-            $(document).ready(function() {
-                // If any further custom JS needed, you can include it here
-            });
-        </script>
-        
     </head>
+
     <body>
+        <% 
+    // Retrieve the error message from the session
+    String message = (String) session.getAttribute("sucess");
+    if (message != null) {
+        out.println("<p class='error-message'>" + message + "</p>");
+        // Remove the message after displaying it so that it doesn't show on the next request
+        session.removeAttribute("sucess");
+    }
+    %>
+      
         <%
-    if (session.getAttribute("name") != null && session.getAttribute("name") != "") {
-%>
-
-    <!-- Header inclusion -->
-    
-
-    <div class="page-head">
-        <div class="container">
-            <h3>Check Out</h3>
-        </div>
-    </div>
-
-    <div class="checkout">
-        <div class="container">
-            <h3>My Shopping Bag</h3>
-            <%
-                int index = 0;
-                int paymentId = 101;
-                ResultSet rsCountCheck = DatabaseConnection.getResultFromSqlQuery("select count(*) from tblcart where customer_id='" + session.getAttribute("id") + "'");
-                rsCountCheck.next();
-                int cartItem = rsCountCheck.getInt(1);
-
-                if (cartItem > 0) {
-            %>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>SR.No</th>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Selling Price(Rs)</th>
-                            <th>Total Price(Rs)</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
+            
+            if (session.getAttribute("name") != null && session.getAttribute("name") != "") {
+        %>
+        
+        <div class="cart-container">
+            
+            <div class="cart-items-section">
+                <h1>Shopping Cart</h1>
+                <ul class="cart-items">
                     <%
-                        ResultSet totalProduct = DatabaseConnection.getResultFromSqlQuery("select tblproduct.image_name,tblproduct.name,tblcart.quantity,tblcart.item_price,tblcart.total_price,tblcart.product_id from tblproduct,tblcart where tblproduct.id=tblcart.product_id and customer_id='" + session.getAttribute("id") + "'");
-                        if(totalProduct != null){
+                        int index = 0;
+                        int paymentId = 101;
+                        ResultSet rsCountCheck = DatabaseConnection.getResultFromSqlQuery("select count(*) from tblcart where customer_id='" + session.getAttribute("id") + "'");
+                        rsCountCheck.next();
+                        int cartItem = rsCountCheck.getInt(1);
+
+                        if (cartItem > 0) {
+                            ResultSet totalProduct = DatabaseConnection.getResultFromSqlQuery("select tblproduct.image_name,tblproduct.name,tblcart.quantity,tblcart.item_price,tblcart.total_price,tblcart.product_id from tblproduct,tblcart where tblproduct.id=tblcart.product_id and customer_id='" + session.getAttribute("id") + "'");
                             while (totalProduct.next()) {
                                 index++;
                     %>
-                    <tr class="rem1">
-                        <td class="invert"><%=index%></td>
-                        <td class="invert">
-                            <img src="uploads/products/<%=totalProduct.getString(1)%>" alt="" class="pro-image-front" style="width: 150px; height: 100px;">
-                            <br><%=totalProduct.getString(2)%>
-                        </td>
-                        <td class="invert">
-                            <div class="quantity">
+                    <li class="cart-item">
+                        <div class="item-details">
+                            <img src="uploads/products/<%=totalProduct.getString(1)%>" alt="<%=totalProduct.getString(2)%>" class="item-image">
+                            <span class="item-name"><%=totalProduct.getString(2)%></span>
+                            <div class="quantity-controls">
                                 <form action="UpdateProductQuantity" method="post">
                                     <input type="hidden" value="<%=totalProduct.getInt(6)%>" name="productId">
-                                    <input type="number" name="quantity" value="<%=totalProduct.getInt(3)%>" style="width: 50px; height: 35px;">
-                                    <input type="submit" class="btn btn-danger" value="Change">
+                                    <div class="quantity-input">
+                                        <input type="number" name="quantity" value="<%=totalProduct.getInt(3)%>" style="width: 50px; height: 35px;">
+                                        <input type="submit" class="apply-btn" value="Change">
+                                    </div>
                                 </form>
                             </div>
-                        </td>
-                        <td class="invert"><%=totalProduct.getDouble(4)%>&nbsp;Rs.</td>
-                        <td class="invert"><%=totalProduct.getDouble(5)%>&nbsp;Rs.</td>
-                        <td class="invert">
-                            <a href="removeProductFromCart.jsp?productId=<%=totalProduct.getInt(6)%>" onclick="return confirm('Are you sure you want to remove this item from cart?');">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
+
+                        </div>
+                        <span class="item-price"><%=totalProduct.getDouble(4)%>&nbsp;Rs.</span>
+                        <span class="remove-item"><a href="removeProductFromCart.jsp?productId=<%=totalProduct.getInt(6)%>" onclick="return confirm('Are you sure you want to remove this item from cart?');">remove</a></span>
+                    </li>
                     <%
-                        }} else out.println("No products found in the cart.");
-                    %>
-                    <%
-                        double finalBill = 0.0;
-                        ResultSet totolAmount = DatabaseConnection.getResultFromSqlQuery("select sum(total_price) from tblcart where customer_id='" + session.getAttribute("id") + "'");
-                        if (totolAmount.next()) {
-                            finalBill = totolAmount.getDouble(1);
+                            }
+                        } else {
+                            out.println("<center><strong>No products found in your cart.</strong></center>");
                         }
                     %>
-                    <tr>
-                        <td colspan="4"></td>
-                        <td colspan="2"><strong><center>Total Amount.:&nbsp;<%=finalBill%> Rs.</center></strong></td>
-                    </tr>
-                </table>
+                </ul>
             </div>
-            <%
-            // Continue the rest of your code here
-            %>
 
-        </div>
+            <div class="summary-section">
+    <div class="total-section">
+        <strong>Total Items Selected:</strong> <%=cartItem%>
     </div>
-            <div class="checkout-action">
-               <a href="ProvideAddress.jsp" class="btn btn-primary" onclick="updatePurchasedCount()">Continue</a>
-            </div>
-            
- <!-- Footer inclusion -->
-        <jsp:include page="footer.jsp"></jsp:include>
-<%
-    } else {
+
+    <div class="total-section">
+        <%
+            double finalBill = 0.0;
+            ResultSet totolAmount = DatabaseConnection.getResultFromSqlQuery("select sum(total_price) from tblcart where customer_id='" + session.getAttribute("id") + "'");
+            if (totolAmount.next()) {
+                finalBill = totolAmount.getDouble(1);
+            }
+        %>
+        <strong>Order Subtotal: Rs. <%=finalBill%></strong>
+    </div>
+    
+    <!-- Form for order details -->
+    <form action="GetProductOrders" method="post">
+        <input type="hidden" name="payment_id" value="<%= paymentId %>">
         
-        out.println("<center><strong>No items in your Cart.</strong></center>");
-    }
+        <div class="coupon-section">
+            <label for="name">Customer Name:</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your name" style="width: 100%; padding: 5px;">
+        </div>
+        
+        <input type="submit" class="checkout-btn" value="Place Order">
+    </form>
+    
+    <a href="index.jsp" class="back-to-shop">Back to Shop</a>
+</div>
 
-} else {
-    response.sendRedirect("index.jsp");
-}
-%>
 
+        <%
+            } else {
+                response.sendRedirect("customer-login.jsp");
+            }
+        %>
 
     </body>
+
 </html>

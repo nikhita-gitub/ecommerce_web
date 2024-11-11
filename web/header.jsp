@@ -106,17 +106,20 @@
 <!-- Header Section -->
 <div class="header">
     <!-- Logo -->
-    <div class="logo">GiftShop</div>
+    <div class="logo">E-GiftShopee</div>
 
     <!-- Search Bar -->
-    <input type="text" placeholder="Search best gift for your best ones">
+    <form action="filter.jsp" method="get">
+    <input type="text" name="search" placeholder="Search best gift for your best ones" />
+    <button type="submit" class="icon">Search</button>
+    </form>
 
     <!-- Navigation Icons -->
     <div class="icons">
         <a href="index.jsp" class="icon">Home</a>
 
         <!-- Category Dropdown -->
-        <select>
+        <select id="categorySelect" onchange="redirectToCategory()">
             <option value="all">Select Category</option>
             <option value="men">Best Men Gifts</option>
             <option value="women">Best Women Gifts</option>
@@ -124,6 +127,25 @@
             <option value="kids">Best Kids Gifts</option>
             <option value="family">Best Family Gifts</option>
         </select>
+        
+       
+
+<script>
+    function redirectToCategory() {
+        var category = document.getElementById("categorySelect").value;
+        
+        // Define the base URL
+        var baseUrl = "gifts.jsp";
+        
+        // Redirect based on the selected category
+        if (category !== "all") {
+            window.location.href =category+ baseUrl ;
+        } else {
+            window.location.href = "index.jsp"; // Redirect to the base page (all products)
+        }
+    }
+</script>
+
 
         <!-- Cart Section with Item Count -->
         <div class="cart-section">

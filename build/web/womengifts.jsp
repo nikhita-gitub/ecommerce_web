@@ -1,3 +1,9 @@
+<%-- 
+    Document   : womengifts
+    Created on : Nov 11, 2024, 11:42:34 PM
+    Author     : matur
+--%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="com.connection.*"%>
 <%@ page import="java.sql.*"%>
@@ -162,12 +168,12 @@
     <br/>
 
     <div class="products-heading">
-        Our Products
+        Women's Gifts
     </div>
 
     <div class="gift-grid">
         <%
-            ResultSet retriveProduct = DatabaseConnection.getResultFromSqlQuery("SELECT * FROM tblproduct");
+            ResultSet retriveProduct = DatabaseConnection.getResultFromSqlQuery("SELECT * FROM tblproduct WHERE product_category = 'Best Women Gift'");
             while (retriveProduct.next()) {
         %>
             <div class="gift-item">
@@ -203,3 +209,5 @@
     %>
 </body>
 </html>
+
+

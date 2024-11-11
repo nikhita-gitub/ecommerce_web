@@ -46,7 +46,7 @@
                                                     <th>Name</th>
                                                     <th>Image</th>
                                                     <th>Description</th>
-                                                    <th>MRP(Rs)</th>
+                                                    
                                                     <th>Price (Rs)</th>
                                                     <th>Date</th>
                                                     <th>Status</th>
@@ -64,7 +64,7 @@
                                                 <td><image src="uploads/<%=rs.getString(7)%>"
                                                            width="100" height="70"></image></td>
                                                 <td><%=rs.getString("description")%></td>
-                                                <td><del><%=rs.getString("mrp_price")%></del></td>
+                                                
                                                 <td><%=rs.getString("price")%></td>
                                                 <td><%=rs.getString("create_date")%></td>
                                                 <td><%=rs.getString("active")%></td>

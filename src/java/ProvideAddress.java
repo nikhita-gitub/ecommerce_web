@@ -40,25 +40,7 @@ public class ProvideAddress extends HttpServlet {
             // Step 3: Process the order
             try (Connection conn = DatabaseConnection.getConnection()) {
                 // Fetch the cart items for this customer
-                String cartQuery = "SELECT product_id, quantity FROM tblcart WHERE customer_id = ?";
-                try (PreparedStatement stmt = conn.prepareStatement(cartQuery)) {
-                    stmt.setString(1, customerId);
-                    try (ResultSet cartItems = stmt.executeQuery()) {
-                        // Step 4: Update the purchased count for each product
-                        String updateQuery = "UPDATE tblproduct SET purchases = purchases + ? WHERE id = ?";
-                        try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
-                            while (cartItems.next()) {
-                                int productId = cartItems.getInt("product_id");
-                                int cartQuantity = cartItems.getInt("quantity");
-
-                                // Update the purchases count based on the cart quantity
-                                updateStmt.setInt(1, cartQuantity);
-                                updateStmt.setInt(2, productId);
-                                updateStmt.executeUpdate();
-                            }
-                        }
-                    }
-                }
+                
 
                 // Step 5: Insert the order into tblorders
                 String insertOrderQuery = "INSERT INTO tblorders (customer_id, name, phone, email, address, pincode, address_type, payment_method) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
