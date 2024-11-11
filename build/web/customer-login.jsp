@@ -141,7 +141,7 @@
         <button class="login-btn">LOGIN</button>
         </form>
         <p class="sign-up-message">Don't have an account yet? <a href="customer-register.jsp">Sign Up</a></p>
-        <a href="login_admin.jsp" class="admin-login">Login as Admin</a>
+        <a href="admin-login.jsp" class="admin-login">Login as Admin</a>
     </div>
     
 </body>

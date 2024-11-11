@@ -20,54 +20,6 @@
             color: #333;
         }
 
-        /* Header */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #ffdde1; /* Softer pink for a warm tone */
-            padding: 10px 20px;
-            color: #333;
-        }
-        .header .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ff6f61; /* Slightly darker shade for contrast */
-        }
-        .header input[type="text"] {
-            width: 40%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ffc2c2; /* Light border */
-            color: #333;
-        }
-        .header .icons {
-            display: flex;
-            align-items: center;
-        }
-        .header .icon, .header select {
-            margin-left: 10px;
-            background-color: #ff6f61; /* Unified color */
-            padding: 8px 12px;
-            border-radius: 5px;
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background 0.3s;
-            border: none;
-            font-size: 0.9rem;
-        }
-        .header .icon:hover, .header select:hover {
-            background-color: #ff8367; /* Softer hover effect */
-        }
-
-        /* Dropdown for Category Selection */
-        .header select {
-            appearance: none;
-            color: white;
-            font-size: 0.9rem;
-        }
-
                /* Welcome Section */
                .welcome-section {
                 position: relative;
@@ -148,14 +100,7 @@
         }
         
 
-        /* Footer Styles */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #ffdde1; /* Matching footer color */
-            color: #333;
-            width: 100%;
-        }
+        
     </style>
 </head>
 
@@ -164,26 +109,19 @@
             //Checking whether admin in session or not
             if (session.getAttribute("name") != null && session.getAttribute("name") != "") {
         %>
+     <% 
+    // Retrieve the error message from the session
+    String message = (String) session.getAttribute("added");
+    if (message != null) {
+        out.println("<p class='error-message'>" + message + "</p>");
+        // Remove the message after displaying it so that it doesn't show on the next request
+        session.removeAttribute("added");
+    }
+%>
+    <!--Header-->
     <jsp:include page="header.jsp"></jsp:include>
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">GiftShop</div>
-        <input type="text" placeholder="Search best gift for ur best ones">
-        <div class="icons">
-            <a href="#" class="icon">? Like</a>
-            <select>
-                <option value="all">Select Category</option>
-                <option value="men">Best Men Gifts</option>
-                <option value="women">Best Women Gifts</option>
-                <option value="couple">Best Couple Gifts</option>
-                <option value="kids">Best Kids Gifts</option>
-                <option value="family">Best Family Gifts</option>
-            </select>
-            <a href="checkout.jsp" class="icon">Add to Cart</a>
-            <a href="my-orders.jsp" class="icon">Ordered Items</a>
-            <a href="logout.jsp" class="icon">Logout</a>
-        </div>
-    </div>
+
+
 
     <div class="welcome-section">
         <img src="https://img.freepik.com/premium-photo/minimalist-brown-gift-box-aesthetic-with-ribbon-flower-background-ai-generated_326414-1475.jpg" alt="Welcome to Gift Shop">
@@ -193,58 +131,52 @@
     <!-- Gift Grid Section -->
     <div class="gift-grid">
         <!-- Sample Gift Items with Forms for Adding to Cart -->
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 1">
-            <h4>Men?s Wallet</h4>
-            <p class="price">$25.00</p>
-            <!-- Add to Cart Form -->
-            <form action="AddToCart" method="POST">
-                <input type="hidden" name="productId" value="1">
-                <input type="hidden" name="productName" value="Men?s Wallet">
-                <input type="hidden" name="price" value="25.00">
-                <button type="submit">? Add to Cart</button>
-            </form>
-        </div>
-
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 2">
-            <h4>Couple's Mug Set</h4>
-            <p class="price">$30.00</p>
-            <!-- Add to Cart Form -->
-            <form action="AddToCart" method="POST">
-                <input type="hidden" name="productId" value="2">
-                <input type="hidden" name="productName" value="Couple?s Mug Set">
-                <input type="hidden" name="price" value="30.00">
-                <button type="submit">? Add to Cart</button>
-            </form>
-        </div>
-
-        <!-- Additional Gift Items -->
-        <div class="gift-item">
-            <img src="https://via.placeholder.com/150" alt="Gift Image 3">
-            <h4>Women?s Necklace</h4>
-            <p class="price">$40.00</p>
-            <!-- Add to Cart Form -->
-            <form action="AddToCart" method="POST">
-                <input type="hidden" name="productId" value="3">
-                <input type="hidden" name="productName" value="Women?s Necklace">
-                <input type="hidden" name="price" value="40.00">
-                <button type="submit">? Add to Cart</button>
-            </form>
-        </div>
-        <!-- More gift items here... -->
+        <%
+    // Modified query to get top 10 products based on purchases
+    String query = "SELECT p.id, p.name, p.product_category, p.image_name, p.price,p.mrp_price, COUNT(c.product_id) AS purchase_count " +
+                   "FROM tblproduct p " +
+                   "LEFT JOIN tblcart c ON p.id = c.product_id " +
+                   "GROUP BY p.id " +
+                   "ORDER BY purchase_count DESC " +
+                   "LIMIT 10";
+    
+    ResultSet retriveProduct = DatabaseConnection.getResultFromSqlQuery(query);
+    while (retriveProduct.next()) {
+%>
+    <div class = "gift-item">
+        <form action="AddToCart" method="post">
+            <div >
+                <div >
+                    <div >
+                        <input type="hidden" name="productId" value="<%= retriveProduct.getInt("id") %>">
+                        
+                        <img src="uploads/products/<%= retriveProduct.getString("image_name") %>" alt="Gift Image" >
+                         
+                        
+                    </div>
+                    <div class="item-info-product">
+                        <h4><%= retriveProduct.getString("name") %></h4>
+                        <h5>Category: <%= retriveProduct.getString("product_category") %></h5>
+                        <div class="price">
+                            <input type="hidden" name="price" value="<%= retriveProduct.getString("price") %>">
+                        </div>
+                        
+                        <input type="submit" value="Add to cart" class="btn btn-warning" onclick="return confirm('Are you sure Do you want to add this item in cart?');">
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
+  <%
+    }
+%>
 
+     <!More gift items here-->
     <div class="view-more">
-        <button>View More Gifts</button>
+        <a href ="products.jsp" >View More Gifts</a>
     </div>
 
-    <!-- Footer Section -->
-    <div class="footer">
-        <p>&copy; 2024 Gift Shop. All Rights Reserved.</p>
-        <p>Follow us on <a href="#" style="color: #ff6f61; text-decoration: underline;">Social Media</a></p>
-        <p>Contact us: support@giftshop.com | 123-456-7890</p>
-    </div>
+    
     <%
             } else {
                 response.sendRedirect("customer-login.jsp");

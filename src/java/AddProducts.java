@@ -78,8 +78,8 @@ public class AddProducts extends HttpServlet {
                 }
 
                 // Insert the product into the database using a PreparedStatement
-                String insertSQL = "INSERT INTO tblproduct (active, code, description, image, image_name, name, price, product_category) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String insertSQL = "INSERT INTO tblproduct (active, code, description, image, image_name, name, price,mrp_price, product_category) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
                 
                 try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(insertSQL)) {
                     ps.setString(1, status);
@@ -89,7 +89,8 @@ public class AddProducts extends HttpServlet {
                     ps.setString(5, imageName);  // Only the image name
                     ps.setString(6, productName);
                     ps.setDouble(7, Double.parseDouble(productPrice));
-                    ps.setString(8, category);
+                    ps.setDouble(8,Double.parseDouble(mrpPrice));
+                    ps.setString(9, category);
                     
                     int rowsInserted = ps.executeUpdate();
                     

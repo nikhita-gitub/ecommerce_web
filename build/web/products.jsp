@@ -31,52 +31,7 @@
     }
 %>
     
-        <div class="ban-top">
-            <div class="container">
-                <div class="top_nav_left">
-                    <nav class="navbar navbar-default">
-                        <div class="container-fluid">
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle collapsed"
-                                        data-toggle="collapse"
-                                        data-target="#bs-example-navbar-collapse-1"
-                                        aria-expanded="false">
-                                    <span class="sr-only">Toggle navigation</span> <span
-                                        class="icon-bar"></span> <span class="icon-bar"></span> <span
-                                        class="icon-bar"></span>
-                                </button>
-                            </div>
-                            <jsp:include page="header.jsp"></jsp:include>
-                            </div>
-                        </nav>
-                    </div>
-
-                    <div class="top_nav_right">
-                        <div class="cart box_1">
-                            <a href="checkout.jsp"> 
-                            <%
-                                ResultSet resultCount = DatabaseConnection.getResultFromSqlQuery("select count(*) from tblcart where customer_id='" + session.getAttribute("id") + "'");
-                                resultCount.next();
-                                int count = resultCount.getInt(1);
-                            %>
-                            <h3>
-                                <div class="total">
-                                    <i class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></i>
-                                    (
-                                    <%=count%>
-                                    items )
-                                </div>
-
-                            </h3>
-                        </a>
-                        <p>
-                            <a href="javascript:;" class="simpleCart_empty">My Cart</a>
-                        </p>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
+        <jsp:include page="header.jsp"></jsp:include>
         <div class="page-head">
             <div class="container">
                 <h3>Products</h3>

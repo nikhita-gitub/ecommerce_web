@@ -24,6 +24,7 @@ public class AddToCart extends HttpServlet {
         int productId = Integer.parseInt(request.getParameter("productId"));
         String price = request.getParameter("price");
         
+        
         HttpSession hs = request.getSession();
         try {
             //If user session is null user have to re-login
@@ -38,7 +39,7 @@ public class AddToCart extends HttpServlet {
                 
                 // Insert the product into the database using a PreparedStatement
                 String insertSQL = "INSERT INTO tblcart (item_price,quantity,total_price,customer_id,product_id) "
-                        + "VALUES ( ?, ?, ?, ?, ?)";
+                        + "VALUES (  ?, ?, ?, ?, ?)";
                 
                 try (PreparedStatement ps = DatabaseConnection.getConnection().prepareStatement(insertSQL)) {
                     
@@ -63,6 +64,7 @@ public class AddToCart extends HttpServlet {
                     } 
                 } catch (Exception e) {
                       e.printStackTrace();
+                      
                       response.sendRedirect("error.jsp"); 
 
                     }
